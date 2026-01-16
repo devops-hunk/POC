@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: test-stage
-      run: echo "This step will test your app..."
+      run: echo "This step will test your app...."
 
   deploy:
     needs: test
