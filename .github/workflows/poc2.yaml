@@ -10,12 +10,14 @@ jobs:
        run: echo "This steps build your image..."
 
   test:
+    needs: build
     runs-on: ubuntu-latest
     steps:
     - name: test-stage
       run: echo "This step will test your app..."
 
   deploy:
+    needs: build
     runs-on: ubuntu-latest
     steps:
     - name: deploy-stage
