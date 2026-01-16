@@ -1,0 +1,22 @@
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+     - name: build-stage
+       run: echo "This steps build your image..."
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: test-stage
+      run: echo "This step will test your app..."
+
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: deploy-stage
+      run: echo "This step will deploy your app..."
