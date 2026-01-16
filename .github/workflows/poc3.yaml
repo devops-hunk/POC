@@ -1,0 +1,37 @@
+on: 
+  workflow_dispatch:
+   inputs:
+    dev:
+      type: environment
+      default: development
+      description: 'Dev environment'
+    stage:
+      type: environment
+      default: staging
+      description: 'Stage environment'
+    prod:
+      type: environment
+      default: production
+      description: 'Prod environment'
+
+jobs:
+  dev-deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.dev }}
+    steps:
+      - name: deploy-to-dev
+        run: echo "Deploying to ${{ inputs.dev }}"
+
+  stage-deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.stage }}
+    steps:
+      - name: deploy-to-stage
+        run: echo "Deploying to ${{ inputs.stage }}"
+
+  prod-deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.prod }}
+    steps:
+      - name: deploy-to-prod
+        run: echo "Deploying to ${{ inputs.prod }}"
