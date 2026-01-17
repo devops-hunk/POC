@@ -1,9 +1,27 @@
-name: Manual Workflow Example
+# name: Manual Workflow Example
+# on:
+#   workflow_dispatch:
+# jobs:
+#   say-hello:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Print message
+#         run: echo "Hello! This workflow was triggered manually."
+
+name: Manual Workflow with Input
+
 on:
   workflow_dispatch:
+    inputs:
+      environment:
+        description: "Deployment environment"
+        required: true
+        default: "dev"
+
 jobs:
-  say-hello:
+  deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Print message
-        run: echo "Hello! This workflow was triggered manually."
+      - name: Print environment
+        run: echo "Deploying to ${{ github.event.inputs.environment }}"
+
