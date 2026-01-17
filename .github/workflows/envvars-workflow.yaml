@@ -1,0 +1,15 @@
+name: "Env Variable Workflow"
+on:
+  workflow_dispatch 
+env:
+  name: "dev"
+  status: "active"
+jobs:
+  poc-envvars:
+    runs-on: ubuntu-latest
+    steps: 
+      - name: shows-envvars
+        run: |
+          echo "Checking The environment and its status for app deployment..."
+          echo "The environment name is: ${{ env.name }}"
+          echo "The environment status is: ${{ env.status }}
