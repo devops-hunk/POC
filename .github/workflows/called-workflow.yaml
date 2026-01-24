@@ -1,0 +1,13 @@
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+
+jobs:
+  reusable-workflow:
+    runs-on: ubuntu-latest
+    steps:
+    - name: print env name
+      run: echo "The environment is: ${{ inputs.environment}}"
