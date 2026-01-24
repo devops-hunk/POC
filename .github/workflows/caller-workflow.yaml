@@ -1,0 +1,9 @@
+name: POC-of-reusable-workflows
+on:
+  workflow_dispatch:
+  
+jobs:
+  testing-reusbale-workflow:
+    uses: ./.github/workflows/called-workflow.yaml
+    with:
+      environment: Production
