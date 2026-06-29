@@ -223,25 +223,28 @@ OLLAMA_READ_TIMEOUT=180
 
 ### 4.2 Install Python Dependencies
 
-`start.sh` handles this automatically, but you can also do it manually.
-
-**Dashboard + basic chat (recommended to start):**
+The project uses `setup.py` to declare all its dependencies. Install the package in editable mode using:
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-pip install -r requirements.dashboard.txt
+pip install -e .
 ```
 
-**Full install (includes RAG, ChromaDB, torch, sentence-transformers):**
+The `-e` flag installs the package in **editable mode** — meaning any changes you make to the source code are reflected immediately without needing to reinstall. This is the standard install method for local development.
 
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-```
+Running `pip install -e .` installs all dependencies declared in `setup.py`, including:
 
-> The full `requirements.txt` installs PyTorch (~2 GB) and ChromaDB. Only needed if you want the **Doc Chat** tab (`ENABLE_DOCUMENT_CHAT=1`). For a first run, `requirements.dashboard.txt` is sufficient.
+- `flask` — web framework
+- `requests` — HTTP client
+- `mysql-connector-python` — MySQL database driver
+- `chromadb` — vector store for document search
+- `sentence-transformers` — embeddings for semantic search
+- `langchain`, `langchain-community`, `langchain-ollama` — LLM orchestration
+- `python-dotenv` — reads `.env` file
+- `pydantic` — data validation
+
+> `start.sh` runs the venv creation and install automatically. You only need to run `pip install -e .` manually if you are setting up outside of `start.sh` or adding the project as a dependency in another Python environment.
 
 ---
 
@@ -363,46 +366,6 @@ Non-zero counts confirm the data loaded successfully.
 
 ---
 
-### 6.2 Option B — Generate Dummy Data for Remaining Apps
-
-For the 4 apps that have no backup data (TKA3.0.1, TKA3.0OUS, Shoulder1.5, Shoulder2.0), the repository includes a seed script that generates realistic dummy pipeline metrics.
-
-**Step 1 — Install the dependency:**
-
-```bash
-source .venv/bin/activate
-pip install mysql-connector-python python-dotenv
-```
-
-**Step 2 — Run the seed script:**
-
-```bash
-python3 seed_missing_apps.py
-```
-
-The script inserts **5 pipeline runs per app** across all metric tables:
-- `cov_job_logs` + `cov_src_coverage` + `cov_dir_coverage` (coverage %)
-- `ut_job_logs` (unit test pass/fail)
-- `todo_job_logs` (TODO/FIXME counts)
-- `squish_job_logs` + `squish_test_results` (Squish UI test results with individual test names)
-- `asan_job_logs` (ASAN memory errors)
-
-Each run is spread over the past 30 days with a realistic upward trend.
-
-**Step 3 — Verify:**
-
-```bash
-docker exec dashboard-mysql mysql -uroot -pdashboard_root -e "
-SELECT 'tka3_0_1 cov'     as tbl, COUNT(*) as cnt FROM dashboard_tka3_0_1.cov_job_logs
-UNION ALL SELECT 'tka3_0_1 squish', COUNT(*) FROM dashboard_tka3_0_1.squish_job_logs
-UNION ALL SELECT 'shoulder1_5 cov', COUNT(*) FROM dashboard_shoulder1_5.cov_job_logs
-UNION ALL SELECT 'shoulder2_0 cov', COUNT(*) FROM dashboard_shoulder2_0.cov_job_logs;
-"
-```
-
-Each table should show **5 rows** (one per generated pipeline run).
-
----
 
 ### 6.3 Refresh the Dashboard
 
@@ -464,6 +427,9 @@ The chat widget (bottom-right corner of the dashboard) connects to Ollama and an
 ## 9. Quick Reference
 
 ```bash
+# To install the depedencies required for this project..
+Install as: pip install -e .
+
 # Start the project
 bash start.sh
 
@@ -476,9 +442,6 @@ docker exec -it dashboard-mysql mysql -uroot -pdashboard_root
 # Load sample data backup
 docker exec -i dashboard-mysql mysql -uroot -pdashboard_root \
   < software_metric_backups/all_schemas_schema_data_20260524_191623.sql
-
-# Generate dummy data for empty apps
-python3 seed_missing_apps.py
 
 # Check application health
 curl http://127.0.0.1:3000/api/app/health
