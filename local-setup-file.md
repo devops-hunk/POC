@@ -362,7 +362,7 @@ clubber  4
 
 Non-zero counts confirm the data loaded successfully.
 
-> **Note on the other backup files:** The individual per-app `.sql` files (e.g. `dashboard_shoulder1_5_schema_data_*.sql`) contain only table schemas — no data rows. TKA3.0.1, TKA3.0OUS, Shoulder1.5, and Shoulder2.0 were never synced from GitLab before the backup was taken. Use Option B below for those apps.
+> **Note on the other backup files:** The individual per-app `.sql` files (e.g. `dashboard_shoulder1_5_schema_data_*.sql`) contain only table schemas — no data rows. TKA3.0.1, TKA3.0OUS, Shoulder1.5, and Shoulder2.0 were never synced from GitLab before the backup was taken.
 
 ---
 
