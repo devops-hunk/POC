@@ -15,12 +15,20 @@ on:
       description: 'Prod environment'
 
 jobs:
+  list-inputs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: listing workflow inputs..
+        run: echo " {{ github.event.inputs }}"
+        
   dev-deploy:
     runs-on: ubuntu-latest
     environment: ${{ inputs.dev }}
     steps:
       - name: deploy-to-dev
         run: echo "Deploying to ${{ inputs.dev }}"
+      - name: print environment variables..
+        run: printenv
 
   stage-deploy:
     runs-on: ubuntu-latest
@@ -35,3 +43,4 @@ jobs:
     steps:
       - name: deploy-to-prod
         run: echo "Deploying to ${{ inputs.prod }}"
+        
